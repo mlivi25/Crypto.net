@@ -5,8 +5,10 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -35,7 +37,7 @@ namespace EncryptorApp
             Console.WriteLine(HashInput.Text);
         }
 
-        private void SubmitHash_Click(object sender, RoutedEventArgs e)
+        private async void SubmitHash_Click(object sender, RoutedEventArgs e)
         {
             var payload = Encoding.UTF8.GetBytes(HashInput.Text);
 
@@ -45,7 +47,34 @@ namespace EncryptorApp
 
             ToStringHashResult.Text = BitConverter.ToString(hash);
 
-            var x = new FileOpenPicker();
+
+            FileOpenPicker openPicker = new FileOpenPicker();
+            openPicker.ViewMode = PickerViewMode.Thumbnail;
+            openPicker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
+            openPicker.FileTypeFilter.Add(".jpg");
+            openPicker.FileTypeFilter.Add(".jpeg");
+            openPicker.FileTypeFilter.Add(".png");
+            openPicker.FileTypeFilter.Add(".txt");
+
+
+            StorageFile file = await openPicker.PickSingleFileAsync();
+            var test = file.
+
+            var hashFile = SHA256.Create().ComputeHash("");
+
+            if (file != null)
+            {
+                // Application now has read/write access to the picked file
+                //OutputTextBlock.Text = "Picked photo: " + file.Name;
+            }
+            else
+            {
+                //OutputTextBlock.Text = "Operation cancelled.";
+            }
+
+
+            //var x = new FileOpenPicker();
+            //x.PickSingleFileAsync();
         }
     }
 }

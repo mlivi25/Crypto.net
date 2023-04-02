@@ -11,7 +11,7 @@
     <Grid FlyoutBase.AttachedFlyout="{StaticResource TextControlCommandBarContextFlyout}">
         <TextBlock x:Name="HashTitle" HorizontalAlignment="Left" Margin="192,114,0,0" TextWrapping="Wrap" Text="Input Hash Text" VerticalAlignment="Top" />
         <TextBox x:Name="HashInput" HorizontalAlignment="Left" Margin="192,138,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="295" TextChanged="HashInput_TextChanged"/>
-        <Button x:Name="SubmitHash" Content="Button" Margin="192,189,0,0" VerticalAlignment="Top" Click="SubmitHash_Click"/>
+        <Button x:Name="SubmitHash" Content="Submit" Margin="192,189,0,0" VerticalAlignment="Top" Click="SubmitHash_Click"/>
         <TextBlock x:Name="Base64HashResult" HorizontalAlignment="Left" Margin="692,145,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="520"/>
         <TextBlock x:Name="Base64title" HorizontalAlignment="Left" Margin="692,114,0,0" TextWrapping="Wrap" Text="Base64" VerticalAlignment="Top" />
         <TextBlock x:Name="HashTitle_Copy1" HorizontalAlignment="Left" Margin="692,90,0,0" TextWrapping="Wrap" Text="Computed Hash:" VerticalAlignment="Top" />
