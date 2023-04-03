@@ -8,15 +8,23 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid FlyoutBase.AttachedFlyout="{StaticResource TextControlCommandBarContextFlyout}">
-        <TextBlock x:Name="HashTitle" HorizontalAlignment="Left" Margin="192,114,0,0" TextWrapping="Wrap" Text="Input Hash Text" VerticalAlignment="Top" />
-        <TextBox x:Name="HashInput" HorizontalAlignment="Left" Margin="192,138,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="295" TextChanged="HashInput_TextChanged"/>
-        <Button x:Name="SubmitHash" Content="Submit" Margin="192,189,0,0" VerticalAlignment="Top" Click="SubmitHash_Click"/>
-        <TextBlock x:Name="Base64HashResult" HorizontalAlignment="Left" Margin="692,145,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="520"/>
-        <TextBlock x:Name="Base64title" HorizontalAlignment="Left" Margin="692,114,0,0" TextWrapping="Wrap" Text="Base64" VerticalAlignment="Top" />
-        <TextBlock x:Name="HashTitle_Copy1" HorizontalAlignment="Left" Margin="692,90,0,0" TextWrapping="Wrap" Text="Computed Hash:" VerticalAlignment="Top" />
-        <TextBlock x:Name="ToStringTitle" HorizontalAlignment="Left" Margin="692,174,0,0" TextWrapping="Wrap" Text="ToString" VerticalAlignment="Top" />
-        <TextBlock x:Name="ToStringHashResult" HorizontalAlignment="Left" Margin="692,202,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="520"/>
+    <Grid FlyoutBase.AttachedFlyout="{StaticResource TextControlCommandBarContextFlyout}" HorizontalAlignment="Center" Width="1069">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="1499*"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock x:Name="HashTitle" HorizontalAlignment="Left" Margin="190,114,0,0" TextWrapping="Wrap" Text="Input Hash Text" VerticalAlignment="Top" Grid.Column="1" />
+        <TextBox x:Name="HashInput" HorizontalAlignment="Left" Margin="190,138,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="295" TextChanged="HashInput_TextChanged" Grid.Column="1"/>
+        <Button x:Name="SubmitHash" Content="Submit" Margin="190,189,0,0" VerticalAlignment="Top" Click="SubmitHash_Click" Grid.Column="1"/>
+        <TextBlock x:Name="Base64HashResult" HorizontalAlignment="Left" Margin="690,145,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="520" Grid.Column="1"/>
+        <TextBlock x:Name="Base64title" HorizontalAlignment="Left" Margin="690,114,0,0" TextWrapping="Wrap" Text="Base64" VerticalAlignment="Top" Grid.Column="1" />
+        <TextBlock x:Name="HashTitle_Copy1" HorizontalAlignment="Left" Margin="690,90,0,0" TextWrapping="Wrap" Text="Computed Hash:" VerticalAlignment="Top" Grid.Column="1" />
+        <TextBlock x:Name="ToStringTitle" HorizontalAlignment="Left" Margin="690,174,0,0" TextWrapping="Wrap" Text="ToString" VerticalAlignment="Top" Grid.Column="1" />
+        <TextBlock x:Name="ToStringHashResult" HorizontalAlignment="Left" Margin="690,202,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="520" Grid.Column="1"/>
+        <Button x:Name="AesEncryptButton" Content="AES Encrypt File" Margin="0,270,0,0" VerticalAlignment="Top" Click="AESEncyrpt_Click" HorizontalAlignment="Center" Grid.Column="1"/>
+        <Button x:Name="AesDecryptFile" Content="AES Decrypt File&#xD;&#xA;" Margin="475,355,0,0" VerticalAlignment="Top" Height="32" Click="AesDecryptFile_Click" Grid.Column="1"/>
+        <TextBlock Grid.Column="1" HorizontalAlignment="Center" Margin="0,415,0,0" TextWrapping="Wrap" Text="Password" VerticalAlignment="Top"/>
+        <TextBox x:Name="PasswordInput" HorizontalAlignment="Left" Margin="388,439,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="295" Grid.Column="1"/>
 
     </Grid>
 </Page>
