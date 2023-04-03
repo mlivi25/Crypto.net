@@ -69,7 +69,7 @@ namespace EncryptorApp
             Aes aes = Aes.Create();
 
             var pbSalt = new byte[16];
-            //RandomNumberGenerator.Create().GetBytes(pbSalt);
+            RandomNumberGenerator.Create().GetBytes(pbSalt);
 
             string password = PasswordInput.Text;
             var pbkd2 = new Rfc2898DeriveBytes(password, pbSalt).GetBytes(32);
@@ -83,6 +83,8 @@ namespace EncryptorApp
 
             using (var outFileStream = await DownloadsFileEntry.OpenStreamForWriteAsync())
             {
+                outFileStream.Write(pbSalt, 0, pbSalt.Length);
+
                 using (var outStreamEncrypted = new CryptoStream(outFileStream, aes.CreateEncryptor(), CryptoStreamMode.Write))
                 {
                     // a time, you can save memory
@@ -134,48 +136,81 @@ namespace EncryptorApp
                 return;
             Aes aes = Aes.Create();
 
-            var pbSalt = new byte[16];
-            //RandomNumberGenerator.Create().GetBytes(pbSalt);
 
-            string password = PasswordInput.Text;
-            var pbkd2 = new Rfc2898DeriveBytes(password, pbSalt).GetBytes(32);
-
-            aes.Key = pbkd2;
-            aes.IV = pbSalt;
-            var outFileName = Path.ChangeExtension(file.Name, ".txt");
-
-            //https://learn.microsoft.com/en-us/windows/uwp/files/file-access-permissions
-            var DownloadsFileEntry = await DownloadsFolder.CreateFileAsync(outFileName, CreationCollisionOption.GenerateUniqueName);
-
-            using (var outFileStream = await DownloadsFileEntry.OpenStreamForWriteAsync())
+            using (var inFs = await file.OpenStreamForReadAsync())
             {
-                using (var outStreamEncrypted = new CryptoStream(outFileStream, aes.CreateDecryptor(), CryptoStreamMode.Write))
+                var pbSalt = new byte[16];
+                inFs.Seek(0, SeekOrigin.Begin);
+                inFs.Read(pbSalt, 0, 16);
+                
+                string password = PasswordInput.Text;
+                var pbkd2 = new Rfc2898DeriveBytes(password, pbSalt).GetBytes(32);
+
+                aes.Key = pbkd2;
+                aes.IV = pbSalt;
+
+                // Decrypt the cipher text from
+                // from the FileSteam of the encrypted
+                // file (inFs) into the FileStream
+                // for the decrypted file (outFs).
+                using (var outStreamDecrypted = new CryptoStream(inFs, aes.CreateDecryptor(), CryptoStreamMode.Read))
                 {
-                    // a time, you can save memory
-                    // and accommodate large files.
-                    int count = 0;
-                    int offset = 0;
+                    var outFileName = Path.ChangeExtension(file.Name, ".txt");
 
-                    // blockSizeBytes can be any arbitrary size.
-                    int blockSizeBytes = aes.BlockSize / 8;
-                    byte[] data = new byte[blockSizeBytes];
-                    int bytesRead = 0;
+                    //https://learn.microsoft.com/en-us/windows/uwp/files/file-access-permissions
+                    var DownloadsFileEntry = await DownloadsFolder.CreateFileAsync(outFileName, CreationCollisionOption.GenerateUniqueName);
 
-                    using (var inFs = await file.OpenStreamForReadAsync())
+                    using (var outFileStream = await DownloadsFileEntry.OpenStreamForWriteAsync())
                     {
+                        int count = 0;
+                        int offset = 0;
+                        int blockSizeBytes = aes.BlockSize / 8;
+                        byte[] data = new byte[blockSizeBytes];
                         do
                         {
-                            count = inFs.Read(data, 0, blockSizeBytes);
+                            count = outStreamDecrypted.Read(data, 0, blockSizeBytes);
                             offset += count;
-                            outStreamEncrypted.Write(data, 0, count);
-                            bytesRead += blockSizeBytes;
+                            outFileStream.Write(data, 0, count);
                         } while (count > 0);
                     }
-                    outStreamEncrypted.FlushFinalBlock();
                 }
             }
 
-        }
+
+
+
+
+
+
+                //using (var outFileStream = await DownloadsFileEntry.OpenStreamForWriteAsync())
+                //{
+                //    using (var outStreamEncrypted = new CryptoStream(outFileStream, aes.CreateDecryptor(), CryptoStreamMode.Write))
+                //    {
+                //        // a time, you can save memory
+                //        // and accommodate large files.
+                //        int count = 0;
+                //        int offset = 0;
+
+                //        // blockSizeBytes can be any arbitrary size.
+                //        int blockSizeBytes = aes.BlockSize / 8;
+                //        byte[] data = new byte[blockSizeBytes];
+                //        int bytesRead = 0;
+
+                //        using (var inFs = await file.OpenStreamForReadAsync())
+                //        {
+                //            do
+                //            {
+                //                count = inFs.Read(data, 0, blockSizeBytes);
+                //                offset += count;
+                //                outStreamEncrypted.Write(data, 0, count);
+                //                bytesRead += blockSizeBytes;
+                //            } while (count > 0);
+                //        }
+                //        outStreamEncrypted.FlushFinalBlock();
+                //    }
+                //}
+
+            }
 
     }
 }
