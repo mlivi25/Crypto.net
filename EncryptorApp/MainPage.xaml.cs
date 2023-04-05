@@ -130,7 +130,6 @@ namespace EncryptorApp
             openPicker.FileTypeFilter.Add(".enc");
 
 
-
             StorageFile file = await openPicker.PickSingleFileAsync();
             if (file is null)
                 return;
@@ -155,7 +154,8 @@ namespace EncryptorApp
                 // for the decrypted file (outFs).
                 using (var outStreamDecrypted = new CryptoStream(inFs, aes.CreateDecryptor(), CryptoStreamMode.Read))
                 {
-                    var outFileName = Path.ChangeExtension(file.Name, ".txt");
+                    var outFileName = Path.ChangeExtension(file.Name, ".txt"); 
+                    //var outFileName = Path.ChangeExtension(file.Name, ".jpg");
 
                     //https://learn.microsoft.com/en-us/windows/uwp/files/file-access-permissions
                     var DownloadsFileEntry = await DownloadsFolder.CreateFileAsync(outFileName, CreationCollisionOption.GenerateUniqueName);
