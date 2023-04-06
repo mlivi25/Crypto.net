@@ -1,22 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -63,6 +53,7 @@ namespace EncryptorApp
 
 
             StorageFile file = await openPicker.PickSingleFileAsync();
+
             if (file is null)
                 return;
 
@@ -70,7 +61,7 @@ namespace EncryptorApp
 
             var pbSalt = new byte[16];
             RandomNumberGenerator.Create().GetBytes(pbSalt);
-
+            
             string password = PasswordInput.Text;
             var pbkd2 = new Rfc2898DeriveBytes(password, pbSalt).GetBytes(32);
 
@@ -84,6 +75,19 @@ namespace EncryptorApp
             using (var outFileStream = await DownloadsFileEntry.OpenStreamForWriteAsync())
             {
                 outFileStream.Write(pbSalt, 0, pbSalt.Length);
+                byte[] fileType = Encoding.ASCII.GetBytes(file.FileType);
+
+                byte[] fileBytes = new byte[5];
+                int i = 0;
+                foreach (char c in fileType)
+                {
+                    fileBytes[i] = (byte)c;
+                    i++;
+                }
+
+                outFileStream.Write(fileBytes, 0, fileBytes.Length);
+
+                
 
                 using (var outStreamEncrypted = new CryptoStream(outFileStream, aes.CreateEncryptor(), CryptoStreamMode.Write))
                 {
@@ -126,7 +130,7 @@ namespace EncryptorApp
         {
             FileOpenPicker openPicker = new FileOpenPicker();
             openPicker.ViewMode = PickerViewMode.Thumbnail;
-            openPicker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
+            openPicker.SuggestedStartLocation = PickerLocationId.Downloads;
             openPicker.FileTypeFilter.Add(".enc");
 
 
@@ -141,6 +145,12 @@ namespace EncryptorApp
                 var pbSalt = new byte[16];
                 inFs.Seek(0, SeekOrigin.Begin);
                 inFs.Read(pbSalt, 0, 16);
+
+                var fileTypeB = new byte[5];
+                inFs.Read(fileTypeB, 0, fileTypeB.Length);
+
+                string fileType = Encoding.ASCII.GetString(fileTypeB, 0, fileTypeB.Length).Replace("\0", "");
+
                 
                 string password = PasswordInput.Text;
                 var pbkd2 = new Rfc2898DeriveBytes(password, pbSalt).GetBytes(32);
@@ -154,8 +164,8 @@ namespace EncryptorApp
                 // for the decrypted file (outFs).
                 using (var outStreamDecrypted = new CryptoStream(inFs, aes.CreateDecryptor(), CryptoStreamMode.Read))
                 {
-                    var outFileName = Path.ChangeExtension(file.Name, ".txt"); 
-                    //var outFileName = Path.ChangeExtension(file.Name, ".jpg");
+                    //var outFileName = Path.ChangeExtension(file.Name, ".txt"); 
+                    var outFileName = Path.ChangeExtension(file.Name, fileType);
 
                     //https://learn.microsoft.com/en-us/windows/uwp/files/file-access-permissions
                     var DownloadsFileEntry = await DownloadsFolder.CreateFileAsync(outFileName, CreationCollisionOption.GenerateUniqueName);
@@ -175,40 +185,6 @@ namespace EncryptorApp
                     }
                 }
             }
-
-
-
-
-
-
-
-                //using (var outFileStream = await DownloadsFileEntry.OpenStreamForWriteAsync())
-                //{
-                //    using (var outStreamEncrypted = new CryptoStream(outFileStream, aes.CreateDecryptor(), CryptoStreamMode.Write))
-                //    {
-                //        // a time, you can save memory
-                //        // and accommodate large files.
-                //        int count = 0;
-                //        int offset = 0;
-
-                //        // blockSizeBytes can be any arbitrary size.
-                //        int blockSizeBytes = aes.BlockSize / 8;
-                //        byte[] data = new byte[blockSizeBytes];
-                //        int bytesRead = 0;
-
-                //        using (var inFs = await file.OpenStreamForReadAsync())
-                //        {
-                //            do
-                //            {
-                //                count = inFs.Read(data, 0, blockSizeBytes);
-                //                offset += count;
-                //                outStreamEncrypted.Write(data, 0, count);
-                //                bytesRead += blockSizeBytes;
-                //            } while (count > 0);
-                //        }
-                //        outStreamEncrypted.FlushFinalBlock();
-                //    }
-                //}
 
             }
 
