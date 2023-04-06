@@ -62,7 +62,7 @@ namespace EncryptorApp
             var pbSalt = new byte[16];
             RandomNumberGenerator.Create().GetBytes(pbSalt);
             
-            string password = PasswordInput.Text;
+            string password = PasswordInput.Password;
             var pbkd2 = new Rfc2898DeriveBytes(password, pbSalt).GetBytes(32);
 
             aes.Key = pbkd2;
@@ -151,8 +151,8 @@ namespace EncryptorApp
 
                 string fileType = Encoding.ASCII.GetString(fileTypeB, 0, fileTypeB.Length).Replace("\0", "");
 
-                
-                string password = PasswordInput.Text;
+
+                string password = PasswordInput.Password;
                 var pbkd2 = new Rfc2898DeriveBytes(password, pbSalt).GetBytes(32);
 
                 aes.Key = pbkd2;
