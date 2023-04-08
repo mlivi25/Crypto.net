@@ -3,8 +3,10 @@ using System.Diagnostics;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.Storage.Pickers;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -40,14 +42,22 @@ namespace EncryptorApp
 
         }
 
-        private bool doPasswordsMatch()
+        private async Task<bool> doPasswordsMatchAsync()
         {
-            return PasswordInput.Password == PasswordInputConfirm.Password;
+            bool result = PasswordInput.Password == PasswordInputConfirm.Password;
+            if (result)
+                return true;
+            else
+            {
+                var messageDialog = new MessageDialog("Passwords do not match.");
+                await messageDialog.ShowAsync();
+                return false;
+            }
         }
 
         private async void AESEncyrpt_Click(object sender, RoutedEventArgs e)
         {
-            if (!doPasswordsMatch())
+            if (!await doPasswordsMatchAsync())
                 return; //Throw error;
 
             FileOpenPicker openPicker = new FileOpenPicker();
@@ -139,7 +149,7 @@ namespace EncryptorApp
 
         private async void AesDecryptFile_Click(object sender, RoutedEventArgs e)
         {
-            if (!doPasswordsMatch())
+            if (!await doPasswordsMatchAsync())
                 return; //Throw error;
 
             FileOpenPicker openPicker = new FileOpenPicker();
