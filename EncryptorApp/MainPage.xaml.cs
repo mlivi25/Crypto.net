@@ -29,6 +29,12 @@ namespace EncryptorApp
             Console.WriteLine(HashInput.Text);
         }
 
+        private void resetPasswords()
+        {
+            PasswordInput.Password = "";
+            PasswordInputConfirm.Password = "";
+        }
+
         private void SubmitHash_Click(object sender, RoutedEventArgs e)
         {
             var payload = Encoding.UTF8.GetBytes(HashInput.Text);
@@ -133,7 +139,7 @@ namespace EncryptorApp
                     outStreamEncrypted.FlushFinalBlock();
                 }
             }
-            PasswordInput.Password = "";
+            resetPasswords();
 
 
             if (file != null)
@@ -208,7 +214,7 @@ namespace EncryptorApp
                         } while (count > 0);
                     }
                 }
-                PasswordInput.Password = "";
+                resetPasswords();
             }
 
             }
