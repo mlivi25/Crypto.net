@@ -114,6 +114,8 @@ namespace EncryptorApp
                     outStreamEncrypted.FlushFinalBlock();
                 }
             }
+            PasswordInput.Password = "";
+
 
             if (file != null)
             {
@@ -184,6 +186,7 @@ namespace EncryptorApp
                         } while (count > 0);
                     }
                 }
+                PasswordInput.Password = "";
             }
 
             }
