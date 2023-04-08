@@ -93,8 +93,6 @@ namespace EncryptorApp
 
             var pbSalt = new byte[16];
             RandomNumberGenerator.Create().GetBytes(pbSalt);
-            
-            
 
             string password = PasswordInput.Password;
             var pbkd2 = new Rfc2898DeriveBytes(password, pbSalt).GetBytes(32);
@@ -149,17 +147,6 @@ namespace EncryptorApp
                 }
             }
             resetPasswords();
-
-
-            if (file != null)
-            {
-                // Application now has read/write access to the picked file
-                //OutputTextBlock.Text = "Picked photo: " + file.Name;
-            }
-            else
-            {
-                //OutputTextBlock.Text = "Operation cancelled.";
-            }
         }
 
         private async void AesDecryptFile_Click(object sender, RoutedEventArgs e)
@@ -221,6 +208,7 @@ namespace EncryptorApp
                             offset += count;
                             outFileStream.Write(data, 0, count);
                         } while (count > 0);
+                        
                     }
                 }
                 resetPasswords();
