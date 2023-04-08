@@ -51,8 +51,17 @@ namespace EncryptorApp
         private async Task<bool> doPasswordsMatchAsync()
         {
             bool result = PasswordInput.Password == PasswordInputConfirm.Password;
-            if (result)
+
+            if (PasswordInput.Password == "" || PasswordInputConfirm.Password == "")
+            {
+                var messageDialog = new MessageDialog("Empty password field.");
+                await messageDialog.ShowAsync();
+                return false;
+            }
+            else if (result)
+            {
                 return true;
+            }
             else
             {
                 var messageDialog = new MessageDialog("Passwords do not match.");
