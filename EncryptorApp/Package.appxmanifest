@@ -16,7 +16,7 @@
   <Properties>
     <DisplayName>EncryptorApp</DisplayName>
     <PublisherDisplayName>mitch</PublisherDisplayName>
-    <Logo>Assets\StoreLogo.png</Logo>
+    <Logo>Assets\Lock.png</Logo>
   </Properties>
 
   <Dependencies>
@@ -38,7 +38,7 @@
         Description="EncryptorApp"
         BackgroundColor="transparent">
         <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png"/>
-        <uap:SplashScreen Image="Assets\SplashScreen.png" />
+        <uap:SplashScreen Image="Assets\Lock.png" />
       </uap:VisualElements>
     </Application>
   </Applications>

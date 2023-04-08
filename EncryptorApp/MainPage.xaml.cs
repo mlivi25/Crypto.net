@@ -40,9 +40,16 @@ namespace EncryptorApp
 
         }
 
+        private bool doPasswordsMatch()
+        {
+            return PasswordInput.Password == PasswordInputConfirm.Password;
+        }
 
         private async void AESEncyrpt_Click(object sender, RoutedEventArgs e)
         {
+            if (!doPasswordsMatch())
+                return; //Throw error;
+
             FileOpenPicker openPicker = new FileOpenPicker();
             openPicker.ViewMode = PickerViewMode.Thumbnail;
             openPicker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
@@ -62,6 +69,8 @@ namespace EncryptorApp
             var pbSalt = new byte[16];
             RandomNumberGenerator.Create().GetBytes(pbSalt);
             
+            
+
             string password = PasswordInput.Password;
             var pbkd2 = new Rfc2898DeriveBytes(password, pbSalt).GetBytes(32);
 
@@ -130,6 +139,9 @@ namespace EncryptorApp
 
         private async void AesDecryptFile_Click(object sender, RoutedEventArgs e)
         {
+            if (!doPasswordsMatch())
+                return; //Throw error;
+
             FileOpenPicker openPicker = new FileOpenPicker();
             openPicker.ViewMode = PickerViewMode.Thumbnail;
             openPicker.SuggestedStartLocation = PickerLocationId.Downloads;

@@ -25,6 +25,8 @@
         <Button x:Name="AesDecryptFile" Content="AES Decrypt File&#xD;&#xA;" Margin="475,355,0,0" VerticalAlignment="Top" Height="32" Click="AesDecryptFile_Click" Grid.Column="1"/>
         <TextBlock Grid.Column="1" HorizontalAlignment="Center" Margin="0,415,0,0" TextWrapping="Wrap" Text="Password" VerticalAlignment="Top"/>
         <PasswordBox x:Name="PasswordInput" HorizontalAlignment="Left" Margin="388,439,0,0" VerticalAlignment="Top" Width="295" Grid.Column="1"/>
+        <PasswordBox x:Name="PasswordInputConfirm" Grid.Column="1" HorizontalAlignment="Left" Margin="388,536,0,0" VerticalAlignment="Top" Width="296"/>
+        <TextBlock Grid.Column="1" HorizontalAlignment="Center" Margin="0,500,0,0" TextWrapping="Wrap" Text="Confirm Password" VerticalAlignment="Top"/>
 
     </Grid>
 </Page>
