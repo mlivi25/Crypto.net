@@ -82,6 +82,8 @@ namespace EncryptorApp
             openPicker.FileTypeFilter.Add(".jpeg");
             openPicker.FileTypeFilter.Add(".png");
             openPicker.FileTypeFilter.Add(".txt");
+            openPicker.FileTypeFilter.Add(".json");
+            openPicker.FileTypeFilter.Add(".js");
 
 
             StorageFile file = await openPicker.PickSingleFileAsync();
